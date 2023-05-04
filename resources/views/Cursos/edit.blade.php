@@ -1,22 +1,24 @@
 @extends('layouts.plantilla');
 
 {{--  titulo head html  --}}
-@section('Crear Curso');
+@section('Editar Curso');
 
 {{--  body html  --}}
 @section('content')
-    <h1>Aquí podras crear un Curso</h1>
+    <h1>Aquí podras editar un Curso</h1>
 
-    <form action="{{route('curso.store')}}" method="POST">
+    <form action="{{route('cursos.update', $curso)}}" method="POST">
 
         @csrf {{--  token de seguridad  --}}
+
+        {{--  directiva para aclarar q el metodo es PUT  --}}
+        @method('put');    
 
         <label>
             Nombre:
             <br>
-            <input type="text" name="name" value="{{old('name')}}">
+            <input type="text" name="name" value="{{old('name', $curso->name)}}">
         </label>
-
         {{--  imprimir el msj de error anta validación  --}}
         @error('name');
             <br>
@@ -28,7 +30,7 @@
         <label>
             Description:
             <br>
-            <textarea name="description" id="" cols="30" rows="10">{{old('description')}}</textarea>
+            <textarea name="description" rows="5">{{old('description', $curso->description)}}</textarea>
         </label>
         {{--  imprimir el msj de error anta validación  --}}
         @error('description');
@@ -41,7 +43,7 @@
         <label>
             Categoría:
             <br>
-            <input type="text" name="categoria" value="{{old('categoria')}}">
+            <input type="text" name="categoria" value="{{old('categoria', $curso->categoria)}}">
         </label>
         {{--  imprimir el msj de error anta validación  --}}
         @error('categoria');
@@ -50,8 +52,7 @@
             <br>
         @enderror
 
-
         <br>
-        <button type="submit">Enviar</button>
+        <button type="submit">Actualizar</button>
     </form>
 @endsection
