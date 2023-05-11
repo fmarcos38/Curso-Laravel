@@ -9,7 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 //importo lo q nesecito para el mutador
 use Illuminate\Database\Eloquent\Casts\Attribute;
-
+//import el modelo Profile
+use App\Models\Profile;
 
 class User extends Authenticatable
 {
@@ -45,6 +46,29 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+    /*  metodo para recuperar el perfil de un usuario 
+        SERIA para una RELACION 1a1
+    */
+    public function profile(){
+        //busca el primer perfil con el id del user actual
+        //$profile = Profile::where('user_id', $this->id)->first();
+
+        //return $profile;
+
+        //hago lo mismo pero con un metodo
+        return $this->hasOne(Profile::class); //debo importar el modelo Profile
+    }
+
+
+    /*  SERIA para una RELACION 1amuchos 
+        un user puede escribir varios posts
+    */
+    public function posts(){
+        return $this->hasMany('App\Models\Post');
+    }
+
+
     //creo metodo para pasar a minus la entrada Y la salida con mayus
     //llamados accesores (get) y mutadores(set)
     protected function name(): Attribute {
@@ -59,13 +83,10 @@ class User extends Authenticatable
     }
 
 
-    //de esta manera se escribian en versiones mas viejas de laravel 
-    /* public function getNameAttribute($value){
-        return ucwords(($value));
-    }
-    public function setNameAttribute($value){
-        this->attributes['name'] = strtolower(($value));
-    } */
 
-    
+
+
+
+
+
 }

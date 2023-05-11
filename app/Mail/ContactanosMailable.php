@@ -16,13 +16,13 @@ class ContactanosMailable extends Mailable
     //creo variable para almacenar el ASUNTO del mail
     public $subjet = "Información de copntacto";
 
+    //variable para información de contacto
+    public $contacto;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
+    //le paso al constructor la info q viene del formulario
+    public function __construct($contacto)
     {
-        //
+        $this->contacto = $contacto;
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\ContactanosController;
 use Illuminate\Support\Facades\Route;
 //importo el controlador
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CursoController;
-use App\Mail\ContactanosMailable;
-use Illuminate\Support\Facades\Mail;
+
 
 
 //ruta a home
@@ -29,22 +29,19 @@ Route::get('cursos/{curso}/edit', [CursoController::class, 'edit'])->name('curso
 //actualizar
 Route::put('cursos/{curso}', [CursoController::class, 'update'])->name('cursos.update');
 
-
 //eliminar registro
 Route::delete('cursos/{curso}', [CursoController::class, 'destroy'])->name('cursos.destroy');
-
 
 //creo ruta para CONTENIDO estatico -> para la vista NOSOTROS
 Route::view('nosotros', 'nosotros')->name('nosotros');
 
-
 //ruta para envio de mail CAP 25
-Route::get('contactanos', function() {
-    $correo = new ContactanosMailable;
+Route::get('contactanos', [ContactanosController::class, 'index'])->name('contactanos.index');
 
-    Mail::to('fmarcos_23@hotmail.com')->send($correo);
+//post para el form de contactanos
+Route::post('contactanos', [ContactanosController::class, 'store'])->name('contactanos.store');
 
-    return "Mensaje enviado";
-});
+
+
 /* forma de declarar rutas con RESOURCE todas en una sola linea de codigo */   //--->CAP 22
 //Route::resource('cursos', CursoController::class);
