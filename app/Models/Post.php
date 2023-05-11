@@ -25,4 +25,16 @@ class Post extends Model
     public function categoria(){
         return $this->belongsTo('App\Models\Categoria');
     }
+
+
+    /* relació 1 a 1 polimorfica*/
+    public function image(){
+        return $this->morphOne('App\Models\Image', 'imagiable'); // 'imagiable' --> es el nombre del metodo creado en el Model Image
+    }
+
+
+    /* relación 1 a muchos polimorfica  COMO es a muchos va --> morphToMany*/
+    public function comments(){
+        return $this->morphToMany('App\models\Comment', 'commentable'); //el 2do param es el metodo creado en el model Comment 
+    }
 }

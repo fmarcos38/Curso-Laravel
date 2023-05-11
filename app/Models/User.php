@@ -69,6 +69,32 @@ class User extends Authenticatable
     }
 
 
+    /*  SERIA para una RELACION 1 a muchos 
+        un user puede subir varios posts
+    */
+    public function videos(){
+        return $this->hasMany('App\Models\Video');
+    }
+
+
+    /* relación muchos a muchos */
+    public function roles(){
+        return $this->belongsToMany('App\Models\Role');
+    }
+
+    /* relacion 1 a muchos ()un user puede hacer varios commnts y un comment pertenece a un user */
+    public function comments(){
+        return $this->hasMany('App\Models\Comment');
+    }
+
+
+    
+    /* relació 1 a 1 polimorfica*/
+    public function image(){
+        return $this->morphOne('App\Models\Image', 'imagiable'); // 'imagiable' --> es el nombre del metodo creado en el Model Image
+    }
+
+
     //creo metodo para pasar a minus la entrada Y la salida con mayus
     //llamados accesores (get) y mutadores(set)
     protected function name(): Attribute {
