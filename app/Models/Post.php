@@ -9,32 +9,24 @@ class Post extends Model
 {
     use HasFactory;
 
-
-    /*  
-        hago relación inversa a users->posts 
-        hago relación 1 a muchos pero inversa
-    */
+    /* RELACIONES */
+    /* relación 1 a muchos inversa con user */
     public function user(){
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
-
-    /*  
-        1 post pertenece a 1 categ 
-    */
-    public function categoria(){
-        return $this->belongsTo('App\Models\Categoria');
+    /* relación 1 a muchos inversa con category */
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 
-
-    /* relació 1 a 1 polimorfica*/
+    /* relacion muchos a muchos */
+    public function tags(){
+        return $this->belongsToMany(Tag::class);
+    }
+    
+    /* relacion 1a1 polimorfica con Images */
     public function image(){
-        return $this->morphOne('App\Models\Image', 'imagiable'); // 'imagiable' --> es el nombre del metodo creado en el Model Image
-    }
-
-
-    /* relación 1 a muchos polimorfica  COMO es a muchos va --> morphToMany*/
-    public function comments(){
-        return $this->morphToMany('App\models\Comment', 'commentable'); //el 2do param es el metodo creado en el model Comment 
+        return $this->morphOne(Image::class, 'imageable');
     }
 }

@@ -2,19 +2,21 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-//importo lo q nesecito para el mutador
-use Illuminate\Database\Eloquent\Casts\Attribute;
-//import el modelo Profile
-use App\Models\Profile;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +37,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
     ];
 
     /**
@@ -46,73 +50,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
-    /*  metodo para recuperar el perfil de un usuario 
-        SERIA para una RELACION 1a1
-    */
-    public function profile(){
-        //busca el primer perfil con el id del user actual
-        //$profile = Profile::where('user_id', $this->id)->first();
-
-        //return $profile;
-
-        //hago lo mismo pero con un metodo
-        return $this->hasOne(Profile::class); //debo importar el modelo Profile
-    }
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'profile_photo_url',
+    ];
 
 
-    /*  SERIA para una RELACION 1amuchos 
-        un user puede escribir varios posts
-    */
+
+    /* RELACIONES */
+    /* relación 1 a muchos con post */
     public function posts(){
         return $this->hasMany('App\Models\Post');
+        //return $this->hasMany(Post::class); //otra forma
     }
-
-
-    /*  SERIA para una RELACION 1 a muchos 
-        un user puede subir varios posts
-    */
-    public function videos(){
-        return $this->hasMany('App\Models\Video');
-    }
-
-
-    /* relación muchos a muchos */
-    public function roles(){
-        return $this->belongsToMany('App\Models\Role');
-    }
-
-    /* relacion 1 a muchos ()un user puede hacer varios commnts y un comment pertenece a un user */
-    public function comments(){
-        return $this->hasMany('App\Models\Comment');
-    }
-
-
-    
-    /* relació 1 a 1 polimorfica*/
-    public function image(){
-        return $this->morphOne('App\Models\Image', 'imagiable'); // 'imagiable' --> es el nombre del metodo creado en el Model Image
-    }
-
-
-    //creo metodo para pasar a minus la entrada Y la salida con mayus
-    //llamados accesores (get) y mutadores(set)
-    protected function name(): Attribute {
-        return new Attribute(
-            //escribo el get con arrow function
-            get: fn($value) => ucwords($value),  
-        
-            set: function($value){
-                return strtolower($value);
-            }
-        );
-    }
-
-
-
-
-
-
-
-
 }
