@@ -14,15 +14,15 @@
                         {{--  muestro los Tags d c/post --> para ello debo acceder a la relacion creado  --}}
                         <div>
                             @foreach($post->tags as $tag)
-                                <a href="" class="inline-block px-3 h-6 bg-{{$tag->color}}-600 text-white rounded-full">
+                                <a href="{{route('posts.tag', $tag)}}" class="inline-block px-3 h-6 bg-{{$tag->color}}-600 text-white rounded-full">
                                     {{$tag->name}}
                                 </a>
                             @endforeach                            
                         </div>
 
-                        {{--  nombre del post y link al post  --}}
-                        <h1 class="text-4xl text-white leading-8 font-bold">
-                            <a href="">
+                        {{--  nombre del post y link al post(debo crear SU VISTA/Pantalla q quiero mostrar)  --}}
+                        <h1 class="text-4xl text-white leading-8 font-bold mt-2">
+                            <a href="{{route('posts.show', $post)}}"> {{--  la vista q creo está en resorce-->views-->post->>show.blade.php  --}}
                                 {{$post->name}}
                             </a>
                         </h1>
